@@ -1,0 +1,8 @@
+{
+  "python.defaultInterpreterPath": "C:\\Users\\asylvis\\Desktop\\MaintDB\\venv\\Scripts\\python.exe",
+  "python.terminal.activateEnvironment": true,
+  "workbench.colorCustomizations": {
+    "minimap.background": "#00000000",
+    "scrollbar.shadow": "#00000000"
+  }
+}

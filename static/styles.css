@@ -1,0 +1,399 @@
+/*
+ * Manufacturing Operation Database — application stylesheet.
+ *
+ * Every colour is a CSS custom property defined in :root, which is generated
+ * from utils/theme.py (PALETTE / RGB / TOKENS) and prepended at runtime by
+ * theme.get_css(). Do NOT hard-code colours here — add/adjust them in
+ * utils/theme.py so the palette stays the single source of truth.
+ */
+
+/* ── Global ──────────────────────────────────────────────── */
+html, body, [data-testid="stSidebar"], .stMarkdown {
+    font-family: var(--font);
+}
+[data-testid="stAppViewContainer"] { background-color: var(--bg); }
+[data-testid="stHeader"]           { background-color: transparent; }
+
+/* ── Theme independence ──────────────────────────────────────
+ * The app is designed light-only. Force light-palette text/colours even when
+ * Streamlit's active theme is Dark (or "use system setting" on a dark OS), so
+ * headings, captions, body text, and link buttons never render light-on-light
+ * or as dark blocks. Inline styles still win (higher specificity), so the
+ * per-element var(--token) colours are unaffected. */
+[data-testid="stAppViewContainer"],
+[data-testid="stSidebar"] { color: var(--text); }
+
+h1, h2, h3, h4, h5, h6,
+[data-testid="stHeading"] { color: var(--text); }
+
+[data-testid="stMarkdownContainer"],
+[data-testid="stMarkdownContainer"] p,
+[data-testid="stMarkdownContainer"] li,
+[data-testid="stMarkdownContainer"] td,
+[data-testid="stMarkdownContainer"] th { color: var(--text); }
+
+[data-testid="stCaptionContainer"],
+[data-testid="stCaptionContainer"] p { color: var(--text-muted) !important; }
+
+/* Link buttons (st.link_button) aren't covered by the stButton rules — give
+ * them the same outlined-ghost styling so they don't fall back to the theme. */
+[data-testid="stLinkButton"] a,
+.stLinkButton a {
+    background: var(--surface) !important;
+    color: var(--primary-dark) !important;
+    border: 1.5px solid rgba(var(--primary-rgb), 0.4) !important;
+    border-radius: var(--radius-sm) !important;
+    font-weight: 600 !important;
+    box-shadow: var(--shadow-xs) !important;
+    transition: var(--transition) !important;
+}
+[data-testid="stLinkButton"] a:hover,
+.stLinkButton a:hover {
+    background: var(--primary-light) !important;
+    border-color: var(--primary) !important;
+    color: var(--primary-dark) !important;
+    box-shadow: 0 4px 16px rgba(var(--primary-rgb), 0.2) !important;
+}
+
+/* ── Sidebar ─────────────────────────────────────────────── */
+[data-testid="stSidebar"] {
+    background-color: var(--surface);
+    border-right: 1px solid var(--border);
+    box-shadow: 2px 0 16px rgba(0, 0, 0, 0.04);
+}
+/* ── Datum brand lockup ──────────────────────────────────── */
+.datum-brand {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    padding: 2px 4px 16px;
+    margin-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+}
+.datum-wm {            /* wordmark column: stacks the name over the sub-label */
+    display: flex;
+    flex-direction: column;
+}
+.datum-name {
+    font-family: var(--font);
+    font-weight: 700;
+    font-size: 1.3rem;
+    line-height: 1;
+    letter-spacing: -0.01em;
+    color: var(--text);
+}
+.datum-sub {
+    font-family: var(--font-mono);
+    font-size: 0.5rem;
+    letter-spacing: 0.2em;
+    color: var(--primary);
+    margin-top: 4px;
+}
+
+/* ── Datum: identifiers & inline code in the mono face ────── */
+code,
+[data-testid="stMarkdownContainer"] code {
+    font-family: var(--font-mono) !important;
+    font-size: 0.85em !important;
+    letter-spacing: 0.02em;
+}
+
+/* ── Buttons — outlined ghost style ──────────────────────── */
+div.stButton > button {
+    background: var(--surface) !important;
+    color: var(--primary-dark) !important;
+    border: 1.5px solid rgba(var(--primary-rgb), 0.4) !important;
+    border-radius: var(--radius-sm) !important;
+    font-family: var(--font) !important;
+    font-weight: 600 !important;
+    font-size: 0.875rem !important;
+    min-height: var(--input-height) !important;
+    transition: var(--transition) !important;
+    box-shadow: var(--shadow-xs) !important;
+    letter-spacing: 0.01em !important;
+}
+div.stButton > button:hover {
+    background: var(--primary-light) !important;
+    border-color: var(--primary) !important;
+    color: var(--primary-dark) !important;
+    box-shadow: 0 4px 16px rgba(var(--primary-rgb), 0.2) !important;
+    transform: translateY(-1px) !important;
+}
+div.stButton > button:active { transform: translateY(0) !important; }
+
+/* Form submit buttons — filled primary CTA */
+div.stFormSubmitButton > button {
+    background: var(--gradient) !important;
+    color: var(--surface) !important;
+    border: none !important;
+    border-radius: var(--radius-sm) !important;
+    font-family: var(--font) !important;
+    font-weight: 700 !important;
+    font-size: 0.9rem !important;
+    min-height: var(--input-height) !important;
+    transition: var(--transition) !important;
+    box-shadow: 0 2px 10px rgba(var(--primary-rgb), 0.35) !important;
+    letter-spacing: 0.02em !important;
+}
+div.stFormSubmitButton > button:hover {
+    box-shadow: 0 6px 22px rgba(var(--primary-rgb), 0.4) !important;
+    transform: translateY(-1px) !important;
+    opacity: 0.94 !important;
+}
+div.stFormSubmitButton > button:active { transform: translateY(0) !important; }
+
+/* ── Inputs ──────────────────────────────────────────────── */
+.stTextInput input,
+.stNumberInput input,
+.stDateInput input,
+[data-baseweb="input"] input {
+    height: var(--input-height) !important;
+    border-radius: var(--radius-sm) !important;
+    border: 1.5px solid var(--border) !important;
+    font-family: var(--font) !important;
+    font-size: 0.9rem !important;
+    color: var(--text) !important;
+    background-color: var(--surface) !important;
+    transition: var(--transition) !important;
+    padding: 0 12px !important;
+}
+.stTextInput input:focus,
+.stNumberInput input:focus,
+[data-baseweb="input"]:focus-within input {
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.12) !important;
+    outline: none !important;
+}
+
+.stTextArea textarea {
+    border-radius: var(--radius-sm) !important;
+    border: 1.5px solid var(--border) !important;
+    font-family: var(--font) !important;
+    font-size: 0.9rem !important;
+    color: var(--text) !important;
+    background-color: var(--surface) !important;
+    transition: var(--transition) !important;
+    padding: 10px 12px !important;
+    line-height: 1.6 !important;
+}
+.stTextArea textarea:focus {
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.12) !important;
+    outline: none !important;
+}
+
+/* Selectbox */
+[data-baseweb="select"] > div:first-child {
+    height: var(--input-height) !important;
+    border-radius: var(--radius-sm) !important;
+    border: 1.5px solid var(--border) !important;
+    background-color: var(--surface) !important;
+    transition: var(--transition) !important;
+}
+[data-baseweb="select"] > div:first-child:hover {
+    border-color: var(--primary) !important;
+}
+[data-baseweb="select"]:focus-within > div:first-child {
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.12) !important;
+}
+
+/* Field labels — uppercase small caps */
+.stTextInput label, .stTextArea label, .stNumberInput label,
+.stSelectbox label, .stDateInput label, .stSlider label,
+.stMultiSelect label, .stRadio label, .stCheckbox label {
+    font-size: 0.78rem !important;
+    font-weight: 600 !important;
+    color: var(--text-muted) !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.07em !important;
+}
+
+/* ── Tabs — pill switcher ────────────────────────────────── */
+.stTabs [data-baseweb="tab-list"] {
+    background-color: var(--bg-muted) !important;
+    border-radius: var(--radius) !important;
+    padding: 4px !important;
+    gap: 2px !important;
+    border-bottom: none !important;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.04) !important;
+}
+.stTabs [data-baseweb="tab"] {
+    border-radius: var(--radius-sm) !important;
+    font-weight: 500 !important;
+    font-size: 0.875rem !important;
+    color: var(--text-muted) !important;
+    padding: 8px 16px !important;
+    background: transparent !important;
+    transition: var(--transition) !important;
+    border: none !important;
+}
+.stTabs [aria-selected="true"] {
+    background-color: var(--surface) !important;
+    color: var(--primary-dark) !important;
+    font-weight: 600 !important;
+    box-shadow: var(--shadow) !important;
+}
+.stTabs [data-baseweb="tab-panel"] {
+    padding-top: 20px !important;
+}
+
+/* ── Expanders ───────────────────────────────────────────── */
+[data-testid="stExpander"] {
+    border: 1px solid var(--border) !important;
+    border-radius: var(--radius-sm) !important;
+    box-shadow: var(--shadow-xs) !important;
+    overflow: hidden !important;
+}
+[data-testid="stExpander"] summary {
+    background-color: var(--bg) !important;
+    font-weight: 600 !important;
+    font-size: 0.9rem !important;
+    color: var(--text) !important;
+    padding: 14px 16px !important;
+}
+[data-testid="stExpander"] summary:hover {
+    background-color: var(--primary-light) !important;
+    color: var(--primary-dark) !important;
+}
+
+/* ── Alerts ──────────────────────────────────────────────── */
+[data-testid="stAlert"] {
+    border-radius: var(--radius-sm) !important;
+    border-left-width: 4px !important;
+    font-size: 0.9rem !important;
+    font-weight: 500 !important;
+}
+
+/* ── Divider ─────────────────────────────────────────────── */
+hr { border-color: var(--border) !important; opacity: 0.8 !important; }
+
+/* ── Custom Cards ────────────────────────────────────────── */
+.dashboard-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 24px 28px;
+    margin: 8px 0;
+    box-shadow: var(--shadow-md);
+    transition: var(--transition);
+    /* Uniform height so a row of KPI cards lines up regardless of whether each
+       has a footer (or a one- vs two-line one). Flex column pins the title to
+       the top and lets the value sit consistently below it. */
+    min-height: 162px;
+    display: flex;
+    flex-direction: column;
+}
+.dashboard-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(var(--primary-rgb), 0.25);
+    box-shadow: var(--shadow-lg);
+}
+.metric-title {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 10px;
+}
+.metric-value {
+    font-size: 2.75rem;
+    font-weight: 800;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1;
+    letter-spacing: -0.03em;
+}
+
+/* ── Asset List Items ────────────────────────────────────── */
+.asset-item {
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin-bottom: 10px;
+    border-left: 4px solid var(--primary);
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+}
+.asset-item:hover {
+    box-shadow: var(--shadow-md);
+    border-left-color: var(--secondary);
+    transform: translateX(3px);
+}
+.asset-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+    letter-spacing: -0.01em;
+}
+.asset-badge {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-right: 6px;
+    margin-bottom: 4px;
+    letter-spacing: 0.02em;
+}
+/* Badge colour variants (use via theme.badge(text, kind)) */
+.badge-info    { background-color: var(--info-light);    color: var(--info-dark);    border: 1px solid var(--info-border); }
+.badge-primary { background-color: var(--primary-soft);  color: var(--primary-dark); border: 1px solid var(--primary-border); }
+.badge-success { background-color: var(--success-light); color: var(--success-dark); border: 1px solid var(--success-border); }
+.badge-neutral { background-color: var(--bg-muted);      color: var(--text-muted);   border: 1px solid var(--border); }
+
+.battery-alert {
+    color: var(--primary-dark);
+    background-color: var(--primary-light);
+    border: 1px solid var(--primary-border);
+    border-radius: var(--radius-sm);
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    margin-top: 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* ── Page Headers ────────────────────────────────────────── */
+.gradient-header {
+    font-size: 2rem;
+    font-weight: 800;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 22px;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+}
+
+/* ── Live Status ─────────────────────────────────────────── */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background-color: var(--success-light);
+    border: 1px solid var(--success-border);
+    color: var(--success-dark);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+.status-pulse {
+    width: 7px;
+    height: 7px;
+    background-color: var(--success);
+    border-radius: 50%;
+    display: inline-block;
+    animation: pulse-green 2s infinite;
+}
+@keyframes pulse-green {
+    0%   { transform: scale(0.95); box-shadow: 0 0 0 0   rgba(var(--success-rgb), 0.7); }
+    70%  { transform: scale(1);    box-shadow: 0 0 0 7px rgba(var(--success-rgb), 0);   }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0   rgba(var(--success-rgb), 0);   }
+}

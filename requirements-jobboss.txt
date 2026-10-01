@@ -1,0 +1,5 @@
+# Optional dependency for the JobBoss / ECI M1 (SQL Server) sync.
+# Install only on a machine that runs the sync and has the Microsoft ODBC Driver
+# for SQL Server installed; the base app (requirements.txt) does not need this.
+#   pip install -r requirements-jobboss.txt
+pyodbc==5.2.0

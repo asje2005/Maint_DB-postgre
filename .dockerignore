@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.git/
+*_dump.sql
+shop_mock.db
+backup/
+fact_production.xlsx
+Maintenance_Index.xlsx
+FIELD_MAP.md.xlsx

@@ -1,0 +1,39 @@
+services:
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_DB: maintdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: maintdb
+    volumes:
+      - maintdb_data:/var/lib/postgresql/data
+      # Init scripts run in filename order: create the owner role → seed →
+      # service-report tables → idempotent upgrades (adds jobboss_ticket_id, repairs
+      # the labor PK sequence, ensures shop_config/documents/machine_issues exist) so
+      # a fresh volume is fully migrated. schema_fixes is also re-applied by the app on boot.
+      - ./00_create_role.sql:/docker-entrypoint-initdb.d/00_create_role.sql:ro
+      - ./maintdb_dump.sql:/docker-entrypoint-initdb.d/01_maintdb_dump.sql:ro
+      - ./service_reports_schema.sql:/docker-entrypoint-initdb.d/02_service_reports_schema.sql:ro
+      - ./schema_fixes.sql:/docker-entrypoint-initdb.d/03_schema_fixes.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d maintdb"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build: .
+    ports:
+      - "8501:8501"
+    environment:
+      PG_HOST: db
+      PG_PORT: "5432"
+      PG_DB: maintdb
+      PG_USER: postgres
+      PG_PASS: maintdb
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  maintdb_data:
